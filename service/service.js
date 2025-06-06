@@ -6,8 +6,8 @@ export const retornaHistoricoInflacao = () => historicoInflacao;
 
 //Faz a busca pelo ID
 export const buscarHistoricoId = (id) => {
-  const historicoId = id;
-  return historicoInflacao.find((historico) => historico.id === id);
+  const historicoId = parseInt(id);
+  return historicoInflacao.find((historico) => historico.id === historicoId);
 };
 
 //Faz a busca pelo ano
@@ -80,11 +80,7 @@ export const calculoIPCA = (
     }
   }
 
-  const valorCorrigido = vi * indiceAcumulado;
+  const resultado = vi * indiceAcumulado;
 
-  return {
-    valorOriginal: parseFloat(vi.toFixed(2)),
-    valorCorrigido: parseFloat(valorCorrigido.toFixed(2)),
-    fatorReajuste: parseFloat(indiceAcumulado.toFixed(6)),
-  };
+  return {resultado: parseFloat(resultado.toFixed(2)),};
 };

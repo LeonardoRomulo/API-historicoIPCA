@@ -8,7 +8,7 @@ import {
 } from "./service/service.js";
 
 const app = express();
-
+// retorna todo o histórico de ipca e também a busca por ano
 app.get("/historicoIPCA", (req, res) => {
   //Pegando os parâmetros por query (forma simplificada)
   const ano = parseInt(req.query.ano);
@@ -35,6 +35,27 @@ app.get("/historicoIPCA", (req, res) => {
   }
 });
 
+//rota para o calculo de reajuste do IPCA
+app.get("/historicoIPCA/calculo", (req, res) => {
+  const { valorInicial, anoInicial, mesInicial, anoFinal, mesFinal } =
+    req.query;
+
+  // console.log("Query params recebidos:", req.query);
+  const resultado = calculoIPCA(
+    valorInicial,
+    anoInicial,
+    mesInicial,
+    anoFinal,
+    mesFinal
+  );
+
+  if (resultado.erro) {
+    return res.status(400).json({ erro: resultado.erro });
+  }
+
+  res.json(resultado);
+});
+
 //busca por id
 app.get("/historicoIPCA/:id", (req, res) => {
   const id = parseInt(req.params.id);
@@ -52,24 +73,6 @@ app.get("/historicoIPCA/:id", (req, res) => {
   }
 
   res.json(historicoId);
-});
-
-//rota para o calculo de reajuste do IPCA
-app.get("/historicoIPCA/calculo", (req, res) => {
-  const { valorInicial, anoInicial, mesInicial, anoFinal, mesFinal } =
-    req.query;
-
-    const resultado = calculoIPCA(valorInicial,
-  anoInicial,
-  mesInicial,
-  anoFinal,
-  mesFinal);
-
-if(resultado.erro){
-return res.status(400).json({erro: resultado.erro});
-}
-
-  res.json(resultado);
 });
 
 //porta de escuta do servidor
